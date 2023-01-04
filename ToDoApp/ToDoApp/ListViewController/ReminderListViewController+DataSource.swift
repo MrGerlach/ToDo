@@ -8,11 +8,11 @@
 import UIKit
 
 extension ReminderListViewController {
-    typealias DataSource = UICollectionViewDiffableDataSource<Int, String>
-    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, String>
+    typealias DataSource = UICollectionViewDiffableDataSource<Int, Reminder.ID>
+    typealias Snapshot = NSDiffableDataSourceSnapshot<Int, Reminder.ID>
     
-    func cellRegistrationHanlder(cell : UICollectionViewListCell, indexPath: IndexPath, id: String) {
-        let reminder = Reminder.sampleData[indexPath.item] // Retrieve the reminder corresponding to the item
+    func cellRegistrationHanlder(cell : UICollectionViewListCell, indexPath: IndexPath, id: Reminder.ID) {
+        let reminder = reminder(for: id) // Retrieve the reminder corresponding to the item
         var contentConfiguration = cell.defaultContentConfiguration() //Retrieve the cell’s default content configuration
         //defaultContentConfiguration() creates a content configuration with the predefined system style
         contentConfiguration.text = reminder.title
@@ -37,5 +37,10 @@ extension ReminderListViewController {
         button.setImage(image, for: .normal)
         
         return UICellAccessory.CustomViewConfiguration(customView: button, placement: .leading(displayed: .always))
+    }
+    
+    func reminder(for id: Reminder.ID) -> Reminder {
+        let index = reminders.indexOfReminder(with: id)
+        return reminders[index]
     }
 }
