@@ -8,16 +8,17 @@
 import UIKit
 extension ReminderViewController {
     enum Row: Hashable {
-        case viewDate
-        case viewNotes
-        case viewTime
-        case viewTitle
+        case header(String)
+        case date
+        case notes
+        case time
+        case title
         
         var imageName: String? {
             switch self {
-            case .viewDate: return "calendar.circle"
-            case .viewNotes: return "square.and.pencil"
-            case .viewTime: return "clock"
+            case .date: return "calendar.circle"
+            case .notes: return "square.and.pencil"
+            case .time: return "clock"
             default: return nil
             }
           }
@@ -30,7 +31,7 @@ extension ReminderViewController {
         
         var textStyle: UIFont.TextStyle {
             switch self {
-            case .viewTitle: return .headline
+            case .title: return .headline
             default: return .subheadline
             }
         }
