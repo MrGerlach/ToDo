@@ -53,23 +53,18 @@ class ReminderViewController: UICollectionViewController {
         let section = section(for: indexPath)
         switch (section, row) {
         case (_, .header(let title)):
-            var contentConfiguration = cell.defaultContentConfiguration()
-            contentConfiguration.text = title
-            cell.contentConfiguration = contentConfiguration
+            cell.contentConfiguration = headerConfiguration(for: cell, with: title)
         case (.view, _):
-            var contentConfiguration = cell.defaultContentConfiguration()
-            contentConfiguration.text = text(for: row)
-            contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
-            contentConfiguration.image = row.image
-            cell.contentConfiguration = contentConfiguration
+            cell.contentConfiguration = defaultConfiguration(for: cell, at: row)
         default:
             fatalError("Unexpected combination of section and row.")
         }
-        var contentConfiguration = cell.defaultContentConfiguration()
-        contentConfiguration.text = text(for: row)
-        contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
-        contentConfiguration.image = row.image
-        cell.contentConfiguration = contentConfiguration
+        
+//        var contentConfiguration = cell.defaultContentConfiguration()
+//        contentConfiguration.text = text(for: row)
+//        contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
+//        contentConfiguration.image = row.image
+//        cell.contentConfiguration = contentConfiguration
         cell.tintColor = UIColor(red: 0.33, green: 0.00, blue: 0.92, alpha: 1.00)
         
     }
@@ -90,16 +85,6 @@ class ReminderViewController: UICollectionViewController {
         dataSource.apply(snapshot)
     }
 
-    
-    func text(for row: Row) -> String? {
-        switch row {
-        case .date: return reminder.dueDate.dayText
-        case .notes: return reminder.notes
-        case .time: return reminder.dueDate.formatted(date: .omitted, time: .shortened)
-        case .title: return reminder.title
-        default: return nil
-        }
-    }
     
     private func section(for indexPath: IndexPath) -> Section {
         let sectionNumber = isEditing ? indexPath.section + 1 : indexPath.section
