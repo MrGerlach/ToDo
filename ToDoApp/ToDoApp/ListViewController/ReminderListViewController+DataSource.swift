@@ -44,8 +44,8 @@ extension ReminderListViewController {
         cell.accessibilityValue = reminder.isComplete ? reminderCompletedValue : reminderNotCompletedValue
         cell.accessories = [ .customView(configuration: doneButtonConfiguration), .disclosureIndicator(displayed: .always)]
         
-        var backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
-        backgroundConfiguration.backgroundColor = UIColor(red: 0.75, green: 0.83, blue: 0.95, alpha: 0.25)
+        let backgroundConfiguration = UIBackgroundConfiguration.listGroupedCell()
+        //backgroundConfiguration.backgroundColor = UIColor(red: 0.75, green: 0.83, blue: 0.95, alpha: 0.25)
         cell.backgroundConfiguration = backgroundConfiguration
     }
     
