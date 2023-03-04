@@ -11,6 +11,8 @@ class ReminderViewController: UICollectionViewController {
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Row>
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Row>
     
+    var tintColor: UIColor = AppColor.tintColor
+    
     var reminder: Reminder {
         didSet {
             onChange(reminder)
@@ -85,7 +87,7 @@ class ReminderViewController: UICollectionViewController {
 //        contentConfiguration.textProperties.font = UIFont.preferredFont(forTextStyle: row.textStyle)
 //        contentConfiguration.image = row.image
 //        cell.contentConfiguration = contentConfiguration
-        cell.tintColor = UIColor(red: 0.33, green: 0.00, blue: 0.92, alpha: 1.00)
+        cell.tintColor = tintColor
         
     }
     

@@ -19,10 +19,11 @@ extension ReminderListViewController {
         NSLocalizedString("Not completed", comment: "Reminder not completed value")
     }
     
-    func updateSnapshot(reloading ids: [Reminder.ID] = []) { /// an empty array as the default value for the parameter allows for calling the method from viewDidLoad() without providing identifiers
+    func updateSnapshot(reloading idsThatChanged: [Reminder.ID] = []) { /// an empty array as the default value for the parameter allows for calling the method from viewDidLoad() without providing identifiers
+        let ids = idsThatChanged.filter { id in filteredReminders.contains(where: { $0.id == id })}
         var snapshot = Snapshot()
         snapshot.appendSections([0])
-        snapshot.appendItems(reminders.map { $0.id })
+        snapshot.appendItems(filteredReminders.map { $0.id })
         if !ids.isEmpty {
             snapshot.reloadItems(ids)
         }
@@ -39,7 +40,7 @@ extension ReminderListViewController {
         cell.contentConfiguration = contentConfiguration
         
         var doneButtonConfiguration = doneButtonConfiguration(for: reminder)
-        doneButtonConfiguration.tintColor = UIColor(red: 0.33, green: 0.00, blue: 0.92, alpha: 1.00)
+        doneButtonConfiguration.tintColor = tintColor
         cell.accessibilityCustomActions = [ doneButtonAccessibilityAction(for: reminder)]
         cell.accessibilityValue = reminder.isComplete ? reminderCompletedValue : reminderNotCompletedValue
         cell.accessories = [ .customView(configuration: doneButtonConfiguration), .disclosureIndicator(displayed: .always)]
