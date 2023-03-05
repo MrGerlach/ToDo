@@ -28,6 +28,7 @@ extension ReminderListViewController {
             snapshot.reloadItems(ids)
         }
         dataSource.apply(snapshot)
+        headerView?.progress = progress
     }
     
     func cellRegistrationHanlder(cell : UICollectionViewListCell, indexPath: IndexPath, id: Reminder.ID) {
