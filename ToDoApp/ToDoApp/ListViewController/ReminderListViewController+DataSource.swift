@@ -19,6 +19,8 @@ extension ReminderListViewController {
         NSLocalizedString("Not completed", comment: "Reminder not completed value")
     }
     
+    private var reminderStore: ReminderStore { ReminderStore.shared }
+    
     func updateSnapshot(reloading idsThatChanged: [Reminder.ID] = []) { /// an empty array as the default value for the parameter allows for calling the method from viewDidLoad() without providing identifiers
         let ids = idsThatChanged.filter { id in filteredReminders.contains(where: { $0.id == id })}
         var snapshot = Snapshot()
@@ -56,6 +58,22 @@ extension ReminderListViewController {
         reminder.isComplete.toggle()
         update(reminder, with: id)
         updateSnapshot(reloading: [id])
+    }
+    
+    func prepareReminderStore() {
+        Task {
+            do {
+                try await reminderStore.requestAccess()
+                reminders = try await reminderStore.readAll()
+            } catch AppError.accessDenied, AppError.accessRestricted {
+                #if DEBUG
+                    reminders = Reminder.sampleData
+                #endif
+            } catch {
+                showError(error)
+            }
+            updateSnapshot()
+        }
     }
     
     private func doneButtonConfiguration(for reminder: Reminder) -> UICellAccessory.CustomViewConfiguration {
