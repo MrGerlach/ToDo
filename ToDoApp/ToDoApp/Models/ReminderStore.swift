@@ -36,6 +36,13 @@ final class ReminderStore {
         }
     }
     
+    private func read(with id: Reminder.ID) throws -> EKReminder {
+        guard let ekReminder = ekStore.calendarItem(withIdentifier: id) as? EKReminder else {
+            throw AppError.failedReadingCalendarItem
+        }
+        return ekReminder
+    }
+    
     func readAll() async throws -> [Reminder]{
         guard isAvailable else {
             throw AppError.accessDenied
@@ -51,5 +58,28 @@ final class ReminderStore {
             }
         }
         return reminders
+    }
+    
+    @discardableResult // attribute instructs the compiler to omit warnings in cases where the call site doesn’t capture the return value
+    func save(_ reminder: Reminder) throws -> Reminder.ID {
+        guard isAvailable else {
+            throw AppError.accessDenied
+        }
+        let ekReminder: EKReminder
+        do {
+            ekReminder = try read(with: reminder.id)
+        } catch {
+            ekReminder = EKReminder(eventStore: ekStore)
+        }
+        ekReminder.update(using: reminder, in: ekStore)
+        try ekStore.save(ekReminder, commit: true)
+        return ekReminder.calendarItemIdentifier
+    }
+    func remove(with id: Reminder.ID) throws {
+        guard isAvailable else {
+            throw AppError.accessDenied
+        }
+        let ekReminder = try read(with: id)
+        try ekStore.remove(ekReminder, commit: true)
     }
 }
