@@ -18,6 +18,7 @@ I am aware that I may have to deal with this in the future.
 - UIKit
 - MVC
 - iOS Accessibility
+- EventKit
 
 ---
 
@@ -26,6 +27,7 @@ I am aware that I may have to deal with this in the future.
 - Edid reminders
 - Add reminders 
 - Help people with disabilities use the app
+- Synchronize reminders with built in app Reminders
 
 ---
 

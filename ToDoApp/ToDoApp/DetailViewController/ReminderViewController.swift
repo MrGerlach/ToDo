@@ -95,12 +95,24 @@ class ReminderViewController: UICollectionViewController {
         workingReminder = reminder
         setEditing(false, animated: true)
     }
+    private func prepareForViewing() {
+        navigationItem.leftBarButtonItem = nil
+        if workingReminder != reminder {
+        reminder = workingReminder
+        }
+        updateSnapshotForViewing()
+    }
     
     private func updateSnapshotForViewing() {
         var snapshot = SnapShot()
         snapshot.appendSections([.view])
         snapshot.appendItems([Row.header(""), Row.title, Row.date, Row.time, Row.notes], toSection: .view)
         dataSource.apply(snapshot)
+    }
+    private func prepareForEditing() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .cancel, target: self, action: #selector(didCancelEdit))
+        updateSnapshotForEditing()
     }
     
     private func updateSnapshotForEditing() {
@@ -112,20 +124,8 @@ class ReminderViewController: UICollectionViewController {
         dataSource.apply(snapshot)
     }
     
-    private func prepareForViewing() {
-        navigationItem.leftBarButtonItem = nil
-        if workingReminder != reminder {
-        reminder = workingReminder
-        }
-        updateSnapshotForViewing()
-    }
-    
-    private func prepareForEditing() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .cancel, target: self, action: #selector(didCancelEdit))
-        updateSnapshotForEditing()
-    }
 
+    
     
     private func section(for indexPath: IndexPath) -> Section {
         let sectionNumber = isEditing ? indexPath.section + 1 : indexPath.section
